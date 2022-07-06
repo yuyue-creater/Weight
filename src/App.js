@@ -7,7 +7,9 @@ import useLocalStorage from './useLocalStorage';
 import Form1 from './Form1';
 import Datetime from './Datetime';
 import Card from './Card';
-
+import BasicTable from './BasicTable';
+import SortingTable from './SortingTable';
+import SortedTable from './SortingTable';
 
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
 const welcome = { greeting: 'Hey', title: 'World' };
@@ -124,32 +126,83 @@ function App() {
       { id: 3, Name: 'ZQY', Weight: 50, Age: 49, Height: 1.65 },
       
   ]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name" // accessor is the "key" in the data
+      },
+      {
+        Header: "Weight (kg)",
+        accessor: "weight"
+      },
+      {
+        Header: "Age",
+        accessor: "age"
+      },
+      {
+        Header: "Height (m)",
+        accessor: "height"
+      }
+    ],
+    []
+  );
+const data = React.useMemo(
+    () => [
+      {
+        name: "Michael",
+        weight: 72.85,
+        age: 21,
+        height: 173
+      },
+      {
+        name: "Fat Shark",
+        weight: 88.80,
+        age: 49,
+        height: 173
+      },
+      {
+        name: "ZQY",
+        weight: 50,
+        age: 49,
+        height: 165
+      }
+    ],
+    []
+  );
   
     return (
-      <div className="container">
-              <h3 className="p-3 text-center">Current members in account</h3>
-              <table className="table table-striped table-bordered">
-                  <thead>
-                      <tr>
-                          <th>Name</th>
-                          <th>Weight</th>
-                          <th>Age</th>
-                          <th>Height</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      {users && users.map(user =>
-                          <tr key={user.id}>
-                              <td>{user.Name}</td>
-                              <td>{user.Weight}</td>
-                              <td>{user.Height}</td>
-                              <td>{user.Age}</td>
-                          </tr>
-                      )}
-                  </tbody>
-              </table>
-              <input type="button" value="Add new Member" />
-          </div>
+
+     
+      <SortedTable columns={columns} data={data} />
+
+      
+      
+      // <div className="container">
+      //         <h3 className="p-3 text-center">Current members in account</h3>
+      //         <table className="table table-striped table-bordered">
+      //             <thead>
+      //                 <tr>
+      //                     <th>Name</th>
+      //                     <th>Weight</th>
+      //                     <th>Age</th>
+      //                     <th>Height</th>
+      //                 </tr>
+      //             </thead>
+      //             <tbody>
+      //                 {users && users.map(user =>
+      //                     <tr key={user.id}>
+      //                         <td>{user.Name}</td>
+      //                         <td>{user.Weight}</td>
+      //                         <td>{user.Height}</td>
+      //                         <td>{user.Age}</td>
+      //                     </tr>
+      //                 )}
+      //             </tbody>
+      //         </table>
+      //         <input type="button" value="Add new Member" />
+      //     </div>
 
 );
 
