@@ -11,6 +11,10 @@ import BasicTable from './BasicTable';
 import SortingTable from './SortingTable';
 import SortedTable from './SortingTable';
 
+import { ProductForm } from './component/productForm/ProductForm';
+import { ProductListMember } from './component/productListMember/ProductListMember';
+
+
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
 const welcome = { greeting: 'Hey', title: 'World' };
 const title = 'React';
@@ -119,12 +123,12 @@ function App() {
   //    </>
   //  );
 
-  
-    const [users, setUsers] = useState([
-      { id: 1, Name: 'Michael', Weight: 72.85, Age: 21, Height: 1.73 },
-      { id: 2, Name: 'Fat Shark', Weight: 88.80, Age: 49, Height: 1.73 },
-      { id: 3, Name: 'ZQY', Weight: 50, Age: 49, Height: 1.65 },
-      
+
+  const [users, setUsers] = useState([
+    { id: 1, Name: 'Michael', Weight: 72.85, Age: 21, Height: 1.73 },
+    { id: 2, Name: 'Fat Shark', Weight: 88.80, Age: 49, Height: 1.73 },
+    { id: 3, Name: 'ZQY', Weight: 50, Age: 49, Height: 1.65 },
+
   ]);
 
   const columns = React.useMemo(
@@ -148,7 +152,7 @@ function App() {
     ],
     []
   );
-const data = React.useMemo(
+  const data = React.useMemo(
     () => [
       {
         name: "Michael",
@@ -166,45 +170,59 @@ const data = React.useMemo(
         name: "ZQY",
         weight: 50,
         age: 49,
-        height: 165
+        height: 162
       }
     ],
     []
   );
-  
-    return (
 
-     
-      <SortedTable columns={columns} data={data} />
+  const [products, setProducts] = useState([]);
 
-      
-      
-      // <div className="container">
-      //         <h3 className="p-3 text-center">Current members in account</h3>
-      //         <table className="table table-striped table-bordered">
-      //             <thead>
-      //                 <tr>
-      //                     <th>Name</th>
-      //                     <th>Weight</th>
-      //                     <th>Age</th>
-      //                     <th>Height</th>
-      //                 </tr>
-      //             </thead>
-      //             <tbody>
-      //                 {users && users.map(user =>
-      //                     <tr key={user.id}>
-      //                         <td>{user.Name}</td>
-      //                         <td>{user.Weight}</td>
-      //                         <td>{user.Height}</td>
-      //                         <td>{user.Age}</td>
-      //                     </tr>
-      //                 )}
-      //             </tbody>
-      //         </table>
-      //         <input type="button" value="Add new Member" />
-      //     </div>
+  const addProduct = member => {
+    setProducts([...products, member]);
+    alert("member added successfully")
+  }
 
-);
+  return (
+    <div>
+      <ProductForm addProductProp={addProduct} />
+      {
+        products.map(member => <ProductListMember key={member.id} item={member} />)
+      }
+
+    </div>
+
+
+    // <SortedTable columns={columns} data={data} />
+
+
+
+    // <div className="container">
+    //         <h3 className="p-3 text-center">Current members in account</h3>
+    //         <table className="table table-striped table-bordered">
+    //             <thead>
+    //                 <tr>
+    //                     <th>Name</th>
+    //                     <th>Weight</th>
+    //                     <th>Age</th>
+    //                     <th>Height</th>
+    //                 </tr>
+    //             </thead>
+    //             <tbody>
+    //                 {users && users.map(user =>
+    //                     <tr key={user.id}>
+    //                         <td>{user.Name}</td>
+    //                         <td>{user.Weight}</td>
+    //                         <td>{user.Height}</td>
+    //                         <td>{user.Age}</td>
+    //                     </tr>
+    //                 )}
+    //             </tbody>
+    //         </table>
+    //         <input type="button" value="Add new Member" />
+    //     </div>
+
+  );
 
 }
 export default App;
