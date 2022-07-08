@@ -10,9 +10,13 @@ import Card from './Card';
 import BasicTable from './BasicTable';
 import SortingTable from './SortingTable';
 import SortedTable from './SortingTable';
+import Modal from "./component/Modal";
+
+import "./App.css"
 
 import { ProductForm } from './component/productForm/ProductForm';
 import { ProductListMember } from './component/productListMember/ProductListMember';
+import AddMember from './AddMember';
 
 
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
@@ -183,17 +187,32 @@ function App() {
     alert("member added successfully")
   }
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+ 
   return (
     <div>
-      <ProductForm addProductProp={addProduct} />
-      {
-        products.map(member => <ProductListMember key={member.id} item={member} />)
-      }
+      <SortedTable columns={columns} data={data} />
 
+
+      <h1>Click the button to add a new member</h1>
+      <button
+        className="openModalBtn"
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      >
+        Add member
+      </button>
+
+
+      {modalOpen && <Modal setOpenModal={setModalOpen} />}
     </div>
 
 
-    // <SortedTable columns={columns} data={data} />
+
+
+    // 
 
 
 
