@@ -14,7 +14,7 @@ import Modal from "./component/Modal";
 
 import "./App.css"
 
-import { ProductForm } from './component/productForm/ProductForm';
+
 import { ProductListMember } from './component/productListMember/ProductListMember';
 import AddMember from './AddMember';
 
@@ -204,7 +204,6 @@ function App() {
       >
         Add member
       </button>
-
 
       {modalOpen && <Modal setOpenModal={setModalOpen} />}
     </div>
