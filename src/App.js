@@ -11,10 +11,13 @@ import BasicTable from './BasicTable';
 import SortingTable from './SortingTable';
 import SortedTable from './SortingTable';
 import Modal from "./component/Modal";
-
+import SideMenu from "./components/SideMenu";
+import { makeStyles, CssBaseline, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import Header from "./components/Header";
+import PageHeader from './components/PageHeader';
 import "./App.css"
 
-
+import Employees from "./Employees/Employees";
 import { ProductListMember } from './component/productListMember/ProductListMember';
 import AddMember from './AddMember';
 
@@ -207,12 +210,6 @@ function App() {
 
       {modalOpen && <Modal setOpenModal={setModalOpen} />}
     </div>
-
-
-
-
-    // 
-
 
 
     // <div className="container">
