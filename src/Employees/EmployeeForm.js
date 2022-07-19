@@ -13,6 +13,7 @@ const genderItems = [
 
 const initialFValues = {
     id: 0,
+    memberID: '',
     fullName: '',
     email: '',
     mobile: '',
@@ -20,7 +21,7 @@ const initialFValues = {
     gender: 'male',
     weight: '',
     height: '',
-    age: '',
+    birthDate: '',
     departmentId: '',
     hireDate: new Date(),
     isPermanent: false,
@@ -31,6 +32,8 @@ export default function EmployeeForm(props) {
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
+        if ('memberID' in fieldValues)
+            temp.memberID = fieldValues.memberID ? "" : "This field is required."
         if ('fullName' in fieldValues)
             temp.fullName = fieldValues.fullName ? "" : "This field is required."
         // if ('email' in fieldValues)
@@ -74,6 +77,13 @@ export default function EmployeeForm(props) {
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
+                <Controls.Input
+                        name="memberID"
+                        label="MemberID"
+                        value={values.fullName}
+                        onChange={handleInputChange}
+                        error={errors.fullName}
+                    />
                     <Controls.Input
                         name="fullName"
                         label="Full Name"
@@ -81,27 +91,7 @@ export default function EmployeeForm(props) {
                         onChange={handleInputChange}
                         error={errors.fullName}
                     />
-                    {/* <Controls.Input
-                        label="Email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleInputChange}
-                        error={errors.email}
-                    /> */}
-                
-                    {/* <Controls.Input
-                        label="Mobile"
-                        name="mobile"
-                        value={values.mobile}
-                        onChange={handleInputChange}
-                        error={errors.mobile}
-                    />
-                    <Controls.Input
-                        label="City"
-                        name="city"
-                        value={values.city}
-                        onChange={handleInputChange}
-                    /> */}
+                   
                     <Controls.Input
                         label="Weight"
                         name="weight"
@@ -109,12 +99,7 @@ export default function EmployeeForm(props) {
                         onChange={handleInputChange}
                     />
                     
-                    <Controls.Input
-                        label="Age"
-                        name="age"
-                        value={values.age}
-                        onChange={handleInputChange}
-                    />
+
                     <Controls.Input
                         label="Height"
                         name="height"
@@ -131,6 +116,14 @@ export default function EmployeeForm(props) {
                         onChange={handleInputChange}
                         items={genderItems}
                     />
+
+                    <Controls.DatePicker
+                        name="birthDate"
+                        label="BirthDate"
+                        value={values.birthDate}
+                        onChange={handleInputChange}
+                    />  
+
                     <Controls.Select
                         name="departmentId"
                         label="Department"
