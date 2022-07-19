@@ -31,10 +31,12 @@ const useStyles = makeStyles(theme => ({
 
 // Character features for each member.
 const headCells = [
+    { id: 'memberID', label: 'MemberID'},
     { id: 'fullName', label: 'Employee Name' },
     { id: 'weight', label: 'Weight'},
-    { id: 'age', label: 'Age'},
+    { id: 'birthDate', label: 'BirthDate'},
     { id: 'height', label: 'Height'}, 
+    { id: 'gender', label: 'Gender'}
 ]
 
 export default function Employees() {
@@ -148,11 +150,12 @@ export default function Employees() {
                             recordsAfterPagingAndSorting().map(item =>
                                 (<TableRow key={item.id}>
 
-                                    
+                                    <TableCell>{item.memberID}</TableCell>
                                     <TableCell>{item.fullName}</TableCell>
                                     <TableCell>{item.weight}</TableCell>
-                                    <TableCell>{item.age}</TableCell>
+                                    <TableCell>{item.birthDate}</TableCell>
                                     <TableCell>{item.height}</TableCell>
+                                    <TableCell>{item.gender}</TableCell>
                                     <TableCell>
                                         <Controls.ActionButton
                                             color="primary"
