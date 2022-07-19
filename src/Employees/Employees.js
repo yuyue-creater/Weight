@@ -123,9 +123,7 @@ export default function Employees() {
     }
    
 
-    // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
-
         // Insert a member to the list
         if (employee.id === 0) {
             employeeService.insertEmployee(employee)
@@ -143,9 +141,8 @@ export default function Employees() {
         setOpenPopup(false)
         setRecords(employeeService.getAllEmployees())
        
-        
-
         // Show that a membe is added
+
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -158,19 +155,16 @@ export default function Employees() {
         setOpenPopup(true)
     }
 
-    // Delete a member
-    const onDelete = (id) => {
+
+    const onDelete = id => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        // Remove the member from the list
         employeeService.deleteEmployee(id);
         
         // Set up the new record
         setRecords(employeeService.getAllEmployees())
-
-        // Notify that a member is deleted
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
@@ -240,6 +234,7 @@ export default function Employees() {
                                     </Controls.ActionButton>
                                 </TableCell>
                             </TableRow>)
+
                             )
                         }
                     </TableBody>

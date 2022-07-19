@@ -90,8 +90,6 @@ function App() {
 
 
   return (
-
-
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
