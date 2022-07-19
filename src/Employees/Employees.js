@@ -29,9 +29,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-// Character features for each member.
 const headCells = [
-    { id: 'fullName', label: 'Employee Name' },
+    { id: 'fullName', label: 'Member Name' },
+    // { id: 'email', label: 'Email Address (Personal)' },
+    // { id: 'mobile', label: 'Mobile Number' },
+    // { id: 'department', label: 'Department' },
+    // { id: 'actions', label: 'Actions', disableSorting: true }
     { id: 'weight', label: 'Weight'},
     { id: 'age', label: 'Age'},
     { id: 'height', label: 'Height'}, 
@@ -66,21 +69,15 @@ export default function Employees() {
         })
     }
 
-    // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
-
-        // Insert a member to the list
         if (employee.id == 0)
             employeeService.insertEmployee(employee)
-        // Update a member's information
         else
             employeeService.updateEmployee(employee)
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)
         setRecords(employeeService.getAllEmployees())
-        
-        // Show that a membe is added
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -93,19 +90,13 @@ export default function Employees() {
         setOpenPopup(true)
     }
 
-    // Delete a member
     const onDelete = id => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
-        // Remove the member from the list
         employeeService.deleteEmployee(id);
-
-        // Set up the new record
         setRecords(employeeService.getAllEmployees())
-
-        // Notify that a member is deleted
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
@@ -147,9 +138,10 @@ export default function Employees() {
                         {
                             recordsAfterPagingAndSorting().map(item =>
                                 (<TableRow key={item.id}>
-
-                                    
                                     <TableCell>{item.fullName}</TableCell>
+                                    {/* <TableCell>{item.email}</TableCell>
+                                    <TableCell>{item.mobile}</TableCell>
+                                    <TableCell>{item.department}</TableCell> */}
                                     <TableCell>{item.weight}</TableCell>
                                     <TableCell>{item.age}</TableCell>
                                     <TableCell>{item.height}</TableCell>
@@ -164,8 +156,8 @@ export default function Employees() {
                                             onClick={() => {
                                                 setConfirmDialog({
                                                     isOpen: true,
-                                                    title: 'This action can not be undone',
-                                                    subTitle: "Are you sure you want to delete this member?",
+                                                    title: 'Would you like to delete this member?',
+                                                    subTitle: "This can not be undone",
                                                     onConfirm: () => { onDelete(item.id) }
                                                 })
                                             }}>
