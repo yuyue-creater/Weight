@@ -14,6 +14,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import Notification from "../components/Notification";
 import ConfirmDialog from "../components/ConfirmDialog";
 
+
+
+
 const useStyles = makeStyles(theme => ({
     pageContent: {
         margin: theme.spacing(5),
@@ -27,6 +30,8 @@ const useStyles = makeStyles(theme => ({
         right: '10px'
     }
 }))
+
+
 
 
 // Character features for each member.
@@ -49,6 +54,15 @@ export default function Employees() {
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
+    const mysql = require('mysql2');
+
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "michael",
+    //     password: "hello",
+    //     database: "weight"
+    // });
+
     const {
         TblContainer,
         TblHead,
@@ -60,7 +74,7 @@ export default function Employees() {
         let target = e.target;
         setFilterFn({
             fn: items => {
-                if (target.value == "")
+                if (target.value === "")
                     return items;
                 else
                     return items.filter(x => x.fullName.toLowerCase().includes(target.value))
@@ -72,7 +86,7 @@ export default function Employees() {
     const addOrEdit = (employee, resetForm) => {
 
         // Insert a member to the list
-        if (employee.id == 0)
+        if (employee.id === 0)
             employeeService.insertEmployee(employee)
         // Update a member's information
         else
@@ -95,6 +109,8 @@ export default function Employees() {
         setOpenPopup(true)
     }
 
+
+
     // Delete a member
     const onDelete = id => {
         setConfirmDialog({
@@ -115,6 +131,8 @@ export default function Employees() {
         })
     }
 
+ 
+   
     return (
         <>
             <PageHeader
