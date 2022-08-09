@@ -5,8 +5,6 @@ import { makeStyles, CssBaseline, createTheme, ThemeProvider } from '@material-u
 import Header from "../components/Header";
 import Employees from "../Employees/Employees";
 
-import Axios from 'axios';
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -45,114 +43,17 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
 
-  const [memberId, setMemberID] = useState("");
-  const [name, setName] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [memberList, setMemberList] = useState([]);
-
-  useEffect(() => {
-    Axios.get('http://localhost:8000/api/get').then((response) => {
-      console.log(response)
-    });
-  }, []);
-
-  const submitReview = () => {
-    Axios.post("http://localhost:8000/api/insert", {
-      memberID: memberId,
-      name: name,
-      weight: weight,
-      height: height,
-      age: age,
-      gender: gender,
-    }).then(() => {
-      alert("Member inserted");
-    });
-  };
-
   return (
 
-    <div className="App">
-      <h1>APPLICATION</h1>
-      <div className='form'>
-      
-        <label>ID</label>
-        <input
-          type="text"
-          name="memberID"
-          onChange={(e) => {
-            setMemberID(e.target.value);
-          }}
-        />
+    <ThemeProvider theme={theme}>
+      <SideMenu />
+      <div className={classes.appMain}>
+        <Header />
 
-        <label>NAME</label>
-        <input
-          type="text"
-          name="name"
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        />
-
-        <label>WEIGHT</label>
-        <input
-          type="text"
-          name="weight"
-          onChange={(e) => {
-            setWeight(e.target.value);
-          }}
-        />
-
-        <label>HEIGHT</label>
-        <input
-          type="text"
-          name="height"
-          onChange={(e) => {
-            setHeight(e.target.value);
-          }}
-        />
-
-        <label>AGE</label>
-        <input
-          type="text"
-          name="age"
-          onChange={(e) => {
-            setAge(e.target.value);
-          }}
-        />
-
-        <label>GENDER</label>
-        <input
-          type="text"
-          name="gender"
-          onChange={(e) => {
-            setGender(e.target.value);
-          }}
-        />
-
-        <button onClick={submitReview}>Submit</button>
-
-        {memberList.map((val) => {
-          return (
-            <h1>
-              MemberID: {val.memberID} | Name: {val.name}
-            </h1>
-          );
-        })}
-
+        <Employees />
       </div>
-    </div>
-    // <ThemeProvider theme={theme}>
-    //   <SideMenu />
-    //   <div className={classes.appMain}>
-    //     <Header />
-
-    //     <Employees />
-    //   </div>
-    //   <CssBaseline />
-    // </ThemeProvider>
+      <CssBaseline />
+    </ThemeProvider>
   );
 }
 
