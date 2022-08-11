@@ -1,7 +1,3 @@
-
-import SelectInput from '@material-ui/core/Select/SelectInput';
-import axios from 'axios';
-
 const KEYS = {
     employees: 'employees',
     employeeId: 'employeeId'
