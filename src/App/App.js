@@ -95,7 +95,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
-      <pre>{JSON.stringify(data, null, 1)}</pre>
+        
+      {/* <pre>{JSON.stringify(data, null, 1)}</pre> */}
         <Header />
 
         <Employees />
