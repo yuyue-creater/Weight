@@ -4,8 +4,7 @@ import SideMenu from "../components/SideMenu";
 import { makeStyles, CssBaseline, createTheme, ThemeProvider } from '@material-ui/core';
 import Header from "../components/Header";
 import Employees from "../Employees/Employees";
-
-import axios from 'axios';
+import axios from "axios";
 
 const theme = createTheme({
   palette: {
@@ -87,7 +86,6 @@ function App() {
 
   if (loading) return "Loading...";
   if (error) return "Error!";
-
 
   return (
     <ThemeProvider theme={theme}>

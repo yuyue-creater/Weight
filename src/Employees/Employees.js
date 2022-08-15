@@ -123,6 +123,7 @@ export default function Employees() {
     }
    
 
+    // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
         // Insert a member to the list
         if (employee.id === 0) {
@@ -161,10 +162,13 @@ export default function Employees() {
             ...confirmDialog,
             isOpen: false
         })
+        // Remove the member from the list
         employeeService.deleteEmployee(id);
         
         // Set up the new record
         setRecords(employeeService.getAllEmployees())
+
+        // Notify that a member is deleted
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
@@ -234,7 +238,6 @@ export default function Employees() {
                                     </Controls.ActionButton>
                                 </TableCell>
                             </TableRow>)
-
                             )
                         }
                     </TableBody>
