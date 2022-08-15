@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import EmployeeForm from "./EmployeeForm";
 import PageHeader from "../components/PageHeader";
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
@@ -13,6 +13,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import Notification from "../components/Notification";
 import ConfirmDialog from "../components/ConfirmDialog";
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -28,27 +29,79 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-
+// Character features for each member.
 const headCells = [
-    { id: 'fullName', label: 'Member Name' },
-    // { id: 'email', label: 'Email Address (Personal)' },
-    // { id: 'mobile', label: 'Mobile Number' },
-    // { id: 'department', label: 'Department' },
-    // { id: 'actions', label: 'Actions', disableSorting: true }
-    { id: 'weight', label: 'Weight'},
-    { id: 'age', label: 'Age'},
-    { id: 'height', label: 'Height'}, 
+    { id: 'memberID', label: 'MemberID' },
+    { id: 'name', label: 'Employee Name' },
+    { id: 'weight', label: 'Weight' },
+    { id: 'birthDate', label: 'BirthDate' },
+    { id: 'height', label: 'Height' },
+    { id: 'gender', label: 'Gender' }
 ]
 
 export default function Employees() {
 
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [records, setRecords] = useState(employeeService.getAllEmployees())
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [openPopup, setOpenPopup] = useState(false)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
+
+
+    useEffect(() => {
+        axios("http://localhost:8000/api/get").then(
+          (res) => {
+            employeeService.empty();
+            res.data.forEach(employee => employeeService.insertEmployee(employee));
+            setLoading(false);
+          },
+          (error) => {
+            console.error("Error fetching data: ", error);
+            setError(true);
+          }
+        );
+      }, []);
+
+    const submitReview = item => {
+      
+        axios.post("http://localhost:8000/api/insert", {
+            memberID: item.memberID,
+            name: item.name,
+            weight: parseFloat(item.weight),
+            height: parseFloat(item.height),
+            age: parseInt(item.height),
+            gender: item.gender,
+        }).then(() => {
+            alert("Member inserted into sql");
+            
+        });
+    };
+
+    const deleteMember = (id) => {
+        alert(`deleting ${id}`)
+        axios.delete(`http://localhost:8000/api/delete/${id}`).then((response) => { console.log(response)
+        
+        })
+    }
+
+    const updateMember = item => {
+        alert(`updating ${item.memberID}`)
+        axios.put(`http://localhost:8000/api/update/${item.memberID}`,  {
+            memberID: item.memberID,
+            name: item.name,
+            weight: parseFloat(item.weight),
+            height: parseFloat(item.height),
+            age: parseInt(item.height),
+            gender: item.gender
+        }).then((response) => {
+            alert("updation complete")
+          }
+        );
+      };
 
     const {
         TblContainer,
@@ -61,23 +114,38 @@ export default function Employees() {
         let target = e.target;
         setFilterFn({
             fn: items => {
-                if (target.value == "")
+                if (target.value === "")
                     return items;
                 else
-                    return items.filter(x => x.fullName.toLowerCase().includes(target.value))
+                    return items.filter(x => x.name.toLowerCase().includes(target.value))
             }
         })
     }
+   
 
+    // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
-        if (employee.id == 0)
+
+        // Insert a member to the list
+        if (employee.id === 0) {
             employeeService.insertEmployee(employee)
-        else
+            submitReview(employee)
+        } 
+        // Update a member's information
+        else {
             employeeService.updateEmployee(employee)
+            updateMember(employee)
+        }
+            
+            
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)
         setRecords(employeeService.getAllEmployees())
+       
+        
+
+        // Show that a membe is added
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -90,13 +158,19 @@ export default function Employees() {
         setOpenPopup(true)
     }
 
-    const onDelete = id => {
+    // Delete a member
+    const onDelete = (id) => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false
         })
+        // Remove the member from the list
         employeeService.deleteEmployee(id);
+        
+        // Set up the new record
         setRecords(employeeService.getAllEmployees())
+
+        // Notify that a member is deleted
         setNotify({
             isOpen: true,
             message: 'Deleted Successfully',
@@ -104,6 +178,8 @@ export default function Employees() {
         })
     }
 
+    if (loading) return "loading..."
+    
     return (
         <>
             <PageHeader
@@ -137,34 +213,33 @@ export default function Employees() {
                     <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item =>
-                                (<TableRow key={item.id}>
-                                    <TableCell>{item.fullName}</TableCell>
-                                    {/* <TableCell>{item.email}</TableCell>
-                                    <TableCell>{item.mobile}</TableCell>
-                                    <TableCell>{item.department}</TableCell> */}
-                                    <TableCell>{item.weight}</TableCell>
-                                    <TableCell>{item.age}</TableCell>
-                                    <TableCell>{item.height}</TableCell>
-                                    <TableCell>
-                                        <Controls.ActionButton
-                                            color="primary"
-                                            onClick={() => { openInPopup(item) }}>
-                                            <EditOutlinedIcon fontSize="small" />
-                                        </Controls.ActionButton>
-                                        <Controls.ActionButton
-                                            color="secondary"
-                                            onClick={() => {
-                                                setConfirmDialog({
-                                                    isOpen: true,
-                                                    title: 'Would you like to delete this member?',
-                                                    subTitle: "This can not be undone",
-                                                    onConfirm: () => { onDelete(item.id) }
-                                                })
-                                            }}>
-                                            <CloseIcon fontSize="small" />
-                                        </Controls.ActionButton>
-                                    </TableCell>
-                                </TableRow>)
+                            (<TableRow key={item.id}>
+                                <TableCell>{item.memberID}</TableCell>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>{item.weight}</TableCell>
+                                <TableCell>{item.birthDate}</TableCell>
+                                <TableCell>{item.height}</TableCell>
+                                <TableCell>{item.gender}</TableCell>
+                                <TableCell>
+                                    <Controls.ActionButton
+                                        color="primary"
+                                        onClick={() => { openInPopup(item)}}>
+                                        <EditOutlinedIcon fontSize="small" />
+                                    </Controls.ActionButton>
+                                    <Controls.ActionButton
+                                        color="secondary"
+                                        onClick={() => {
+                                            setConfirmDialog({
+                                                isOpen: true,
+                                                title: 'This action can not be undone',
+                                                subTitle: "Are you sure you want to delete this member?",
+                                                onConfirm: () => { onDelete(item.id); deleteMember(item.memberID) }
+                                            })
+                                        }}>
+                                        <CloseIcon fontSize="small" />
+                                    </Controls.ActionButton>
+                                </TableCell>
+                            </TableRow>)
                             )
                         }
                     </TableBody>
