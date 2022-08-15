@@ -55,13 +55,7 @@ export function getAllEmployees() {
 
 
 
-export  function init() {
+export  function empty() {
     // empty local storage
     localStorage.setItem(KEYS.employees, JSON.stringify([]))
-    // load from db
-    // const response = await axios.get(`http://localhost:8000/api/getAll/`)
-    //localStorage.setItem(KEYS.employees, JSON.stringify(response.data));
-    let employees = getAllEmployees();
-    
-    return employees;
 }

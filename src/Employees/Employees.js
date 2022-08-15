@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 // Character features for each member.
 const headCells = [
     { id: 'memberID', label: 'MemberID' },
-    { id: 'fullName', label: 'Employee Name' },
+    { id: 'name', label: 'Employee Name' },
     { id: 'weight', label: 'Weight' },
     { id: 'birthDate', label: 'BirthDate' },
     { id: 'height', label: 'Height' },
@@ -42,6 +42,8 @@ const headCells = [
 export default function Employees() {
 
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [records, setRecords] = useState(employeeService.getAllEmployees())
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -50,17 +52,25 @@ export default function Employees() {
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
 
-    const [newWeight, setNewWeight] = useState(0);
-
     useEffect(() => {
-        setNewWeight(localStorage.getItem('weight'));
-    })
+        axios("http://localhost:8000/api/get").then(
+          (res) => {
+            employeeService.empty();
+            res.data.forEach(employee => employeeService.insertEmployee(employee));
+            setLoading(false);
+          },
+          (error) => {
+            console.error("Error fetching data: ", error);
+            setError(true);
+          }
+        );
+      }, []);
 
     const submitReview = item => {
       
         axios.post("http://localhost:8000/api/insert", {
             memberID: item.memberID,
-            name: item.fullName,
+            name: item.name,
             weight: parseFloat(item.weight),
             height: parseFloat(item.height),
             age: parseInt(item.height),
@@ -82,7 +92,7 @@ export default function Employees() {
         alert(`updating ${item.memberID}`)
         axios.put(`http://localhost:8000/api/update/${item.memberID}`,  {
             memberID: item.memberID,
-            name: item.fullName,
+            name: item.name,
             weight: parseFloat(item.weight),
             height: parseFloat(item.height),
             age: parseInt(item.height),
@@ -93,16 +103,6 @@ export default function Employees() {
         );
       };
 
-    // const updateMember = (id) => {
-    //     alert(`updating ${id}`)
-    //     axios.put(`http://localhost:8000/api/update/${id}`
-        
-    //     ).then((response) => {
-    //         alert("updation complete")
-    //       }
-    //     );
-    //   };
-    
     const {
         TblContainer,
         TblHead,
@@ -117,7 +117,7 @@ export default function Employees() {
                 if (target.value === "")
                     return items;
                 else
-                    return items.filter(x => x.fullName.toLowerCase().includes(target.value))
+                    return items.filter(x => x.name.toLowerCase().includes(target.value))
             }
         })
     }
@@ -178,6 +178,8 @@ export default function Employees() {
         })
     }
 
+    if (loading) return "loading..."
+    
     return (
         <>
             <PageHeader
@@ -213,7 +215,7 @@ export default function Employees() {
                             recordsAfterPagingAndSorting().map(item =>
                             (<TableRow key={item.id}>
                                 <TableCell>{item.memberID}</TableCell>
-                                <TableCell>{item.fullName}</TableCell>
+                                <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.weight}</TableCell>
                                 <TableCell>{item.birthDate}</TableCell>
                                 <TableCell>{item.height}</TableCell>
