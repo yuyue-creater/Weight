@@ -52,9 +52,6 @@ export function getAllEmployees() {
     }))
 }
 
-
-
-
 export  function empty() {
     // empty local storage
     localStorage.setItem(KEYS.employees, JSON.stringify([]))
