@@ -3,7 +3,7 @@ import { Grid, } from '@material-ui/core';
 import Controls from "../components/controls/Controls";
 import { useForm, Form } from '../components/useForm';
 import * as employeeService from "../services/employeeService";
-import axios from 'axios';
+
 
 const genderItems = [
     { id: 'male', title: 'Male' },
@@ -27,7 +27,6 @@ const initialFValues = {
     isPermanent: false,
 }
 
-
 export default function EmployeeForm(props) {
     const { addOrEdit, recordForEdit } = props
 
@@ -47,13 +46,15 @@ export default function EmployeeForm(props) {
             ...temp
         })
 
-        if (fieldValues === values)
-            return Object.values(temp).every(x => x === "")
+        if (fieldValues == values)
+            return Object.values(temp).every(x => x == "")
     }
 
     const {
-        values, setValues,
-        errors, setErrors,
+        values,
+        setValues,
+        errors,
+        setErrors,
         handleInputChange,
         resetForm
     } = useForm(initialFValues, true, validate);
@@ -72,9 +73,6 @@ export default function EmployeeForm(props) {
             })
     }, [recordForEdit])
 
-   
-
-
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
@@ -82,9 +80,9 @@ export default function EmployeeForm(props) {
                 <Controls.Input
                         name="memberID"
                         label="MemberID"
-                        value={values.memberID}
+                        value={values.fullName}
                         onChange={handleInputChange}
-                        error={errors.memberID}
+                        error={errors.fullName}
                     />
                     <Controls.Input
                         name="fullName"
@@ -99,7 +97,8 @@ export default function EmployeeForm(props) {
                         name="weight"
                         value={values.weight}
                         onChange={handleInputChange}
-                    />  
+                    />
+                    
 
                     <Controls.Input
                         label="Height"
@@ -149,9 +148,7 @@ export default function EmployeeForm(props) {
                     <div>
                         <Controls.Button
                             type="submit"
-                            text="submit changes"
-                           
-                            />
+                            text="Submit" />
                         <Controls.Button
                             text="Reset"
                             color="default"
