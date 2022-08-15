@@ -19,15 +19,16 @@ export function insertEmployee(data) {
 
 export function updateEmployee(data) {
     let employees = getAllEmployees();
-    let recordIndex = employees.findIndex(x => x.id == data.id);
+    let recordIndex = employees.findIndex(x => x.id === data.id);
     employees[recordIndex] = { ...data }
     localStorage.setItem(KEYS.employees, JSON.stringify(employees));
 }
 
 export function deleteEmployee(id) {
     let employees = getAllEmployees();
-    employees = employees.filter(x => x.id != id)
+    employees = employees.filter(x => x.id !== id)
     localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+ 
 }
 
 export function generateEmployeeId() {
@@ -44,8 +45,23 @@ export function getAllEmployees() {
     let employees = JSON.parse(localStorage.getItem(KEYS.employees));
     //map departmentID to department title
     let departments = getDepartmentCollection();
+    // alert("haha")
     return employees.map(x => ({
         ...x,
         // department: departments[x.departmentId - 1].title
     }))
+}
+
+
+
+
+export  function init() {
+    // empty local storage
+    localStorage.setItem(KEYS.employees, JSON.stringify([]))
+    // load from db
+    // const response = await axios.get(`http://localhost:8000/api/getAll/`)
+    //localStorage.setItem(KEYS.employees, JSON.stringify(response.data));
+    let employees = getAllEmployees();
+    
+    return employees;
 }
