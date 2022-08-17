@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Notification from "../components/Notification";
 import ConfirmDialog from "../components/ConfirmDialog";
 import axios from 'axios';
+import * as Adapter from "./Adapter";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -34,7 +35,7 @@ const headCells = [
     { id: 'memberID', label: 'MemberID' },
     { id: 'name', label: 'Employee Name' },
     { id: 'weight', label: 'Weight' },
-    { id: 'birthDate', label: 'BirthDate' },
+    { id: 'birthDate', label: 'Age' },
     { id: 'height', label: 'Height' },
     { id: 'gender', label: 'Gender' }
 ]
@@ -51,57 +52,19 @@ export default function Employees() {
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
-
     useEffect(() => {
         axios("http://localhost:8000/api/get").then(
-          (res) => {
-            employeeService.empty();
-            res.data.forEach(employee => employeeService.insertEmployee(employee));
-            setLoading(false);
-          },
-          (error) => {
-            console.error("Error fetching data: ", error);
-            setError(true);
-          }
+            (res) => {
+                employeeService.empty();
+                res.data.forEach(employee => employeeService.insertEmployee(employee));
+                setLoading(false);
+            },
+            (error) => {
+                console.error("Error fetching data: ", error);
+                setError(true);
+            }
         );
-      }, []);
-
-    const submitReview = item => {
-      
-        axios.post("http://localhost:8000/api/insert", {
-            memberID: item.memberID,
-            name: item.name,
-            weight: parseFloat(item.weight),
-            height: parseFloat(item.height),
-            age: parseInt(item.height),
-            gender: item.gender,
-        }).then(() => {
-            alert("Member inserted into sql");
-            
-        });
-    };
-
-    const deleteMember = (id) => {
-        alert(`deleting ${id}`)
-        axios.delete(`http://localhost:8000/api/delete/${id}`).then((response) => { console.log(response)
-        
-        })
-    }
-
-    const updateMember = item => {
-        alert(`updating ${item.memberID}`)
-        axios.put(`http://localhost:8000/api/update/${item.memberID}`,  {
-            memberID: item.memberID,
-            name: item.name,
-            weight: parseFloat(item.weight),
-            height: parseFloat(item.height),
-            age: parseInt(item.height),
-            gender: item.gender
-        }).then((response) => {
-            alert("updation complete")
-          }
-        );
-      };
+    }, []);
 
     const {
         TblContainer,
@@ -121,7 +84,7 @@ export default function Employees() {
             }
         })
     }
-   
+
 
     // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
@@ -129,21 +92,19 @@ export default function Employees() {
         // Insert a member to the list
         if (employee.id === 0) {
             employeeService.insertEmployee(employee)
-            submitReview(employee)
-        } 
+            Adapter.createMember(employee)
+        }
         // Update a member's information
         else {
             employeeService.updateEmployee(employee)
-            updateMember(employee)
+            Adapter.updateMember(employee)
         }
-            
-            
+
+
         resetForm()
         setRecordForEdit(null)
         setOpenPopup(false)
         setRecords(employeeService.getAllEmployees())
-       
-        
 
         // Show that a membe is added
         setNotify({
@@ -166,7 +127,7 @@ export default function Employees() {
         })
         // Remove the member from the list
         employeeService.deleteEmployee(id);
-        
+
         // Set up the new record
         setRecords(employeeService.getAllEmployees())
 
@@ -178,8 +139,19 @@ export default function Employees() {
         })
     }
 
+
     if (loading) return "loading..."
+
+
+    function getAge(dob) { 
+        // var dob = new Date(document.getElementById("birthdate").value);
+        var diff_ms = Date.now() - dob.getTime();
+        var age_dt = new Date(diff_ms); 
+      
+        return Math.abs(age_dt.getUTCFullYear() - 1970);
     
+    }
+
     return (
         <>
             <PageHeader
@@ -223,7 +195,7 @@ export default function Employees() {
                                 <TableCell>
                                     <Controls.ActionButton
                                         color="primary"
-                                        onClick={() => { openInPopup(item)}}>
+                                        onClick={() => { openInPopup(item) }}>
                                         <EditOutlinedIcon fontSize="small" />
                                     </Controls.ActionButton>
                                     <Controls.ActionButton
@@ -233,7 +205,7 @@ export default function Employees() {
                                                 isOpen: true,
                                                 title: 'This action can not be undone',
                                                 subTitle: "Are you sure you want to delete this member?",
-                                                onConfirm: () => { onDelete(item.id); deleteMember(item.memberID) }
+                                                onConfirm: () => { onDelete(item.id); Adapter.deleteMember(item.memberID) }
                                             })
                                         }}>
                                         <CloseIcon fontSize="small" />

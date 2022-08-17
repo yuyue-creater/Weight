@@ -1,5 +1,5 @@
 const KEYS = {
-    employees: 'employees',
+    members: 'members',
     employeeId: 'employeeId'
 }
 
@@ -11,23 +11,23 @@ export const getDepartmentCollection = () => ([
 ])
 
 export function insertEmployee(data) {
-    let employees = getAllEmployees();
+    let members = getAllEmployees();
     data['id'] = generateEmployeeId()
-    employees.push(data)
-    localStorage.setItem(KEYS.employees, JSON.stringify(employees))
+    members.push(data)
+    localStorage.setItem(KEYS.members, JSON.stringify(members))
 }
 
 export function updateEmployee(data) {
-    let employees = getAllEmployees();
-    let recordIndex = employees.findIndex(x => x.id === data.id);
-    employees[recordIndex] = { ...data }
-    localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+    let members = getAllEmployees();
+    let recordIndex = members.findIndex(x => x.id === data.id);
+    members[recordIndex] = { ...data }
+    localStorage.setItem(KEYS.members, JSON.stringify(members));
 }
 
 export function deleteEmployee(id) {
-    let employees = getAllEmployees();
-    employees = employees.filter(x => x.id !== id)
-    localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+    let members = getAllEmployees();
+    members = members.filter(x => x.id !== id)
+    localStorage.setItem(KEYS.members, JSON.stringify(members));
  
 }
 
@@ -40,22 +40,19 @@ export function generateEmployeeId() {
 }
 
 export function getAllEmployees() {
-    if (localStorage.getItem(KEYS.employees) == null)
-        localStorage.setItem(KEYS.employees, JSON.stringify([]))
-    let employees = JSON.parse(localStorage.getItem(KEYS.employees));
+    if (localStorage.getItem(KEYS.members) == null)
+        localStorage.setItem(KEYS.members, JSON.stringify([]))
+    let members = JSON.parse(localStorage.getItem(KEYS.members));
     //map departmentID to department title
     let departments = getDepartmentCollection();
     // alert("haha")
-    return employees.map(x => ({
+    return members.map(x => ({
         ...x,
         // department: departments[x.departmentId - 1].title
     }))
 }
 
-
-
-
 export  function empty() {
     // empty local storage
-    localStorage.setItem(KEYS.employees, JSON.stringify([]))
+    localStorage.setItem(KEYS.members, JSON.stringify([]))
 }
