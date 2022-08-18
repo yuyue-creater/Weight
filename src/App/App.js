@@ -1,89 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import SideMenu from "../components/SideMenu";
-import { makeStyles, CssBaseline, createTheme, ThemeProvider } from '@material-ui/core';
-import Header from "../components/Header";
-import Employees from "../Employees/Employees";
-import axios from "axios";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#333996",
-      light: '#3c44b126'
-    },
-    secondary: {
-      main: "#f83245",
-      light: '#f8324526'
-    },
-    background: {
-      default: "#f4f5fd"
-    },
-  },
-  overrides: {
-    MuiAppBar: {
-      root: {
-        transform: 'translateZ(0)'
-      }
-    }
-  },
-  props: {
-    MuiIconButton: {
-      disableRipple: true
-    }
-  }
-})
-
-const useStyles = makeStyles({
-  appMain: {
-    paddingLeft: '320px',
-    width: '100%'
-  }
-})
-
-
-
-
-
-
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import MainPage from "./MainPage";
+import "./App.css";
 
 function App() {
-  const classes = useStyles();
+  // React States
+  const [errorMessages, setErrorMessages] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // User Login info
+  const database = [
+    {
+      username: "user1",
+      password: "pass1"
+    },
+    {
+      username: "user2",
+      password: "pass2"
+    }
+  ];
 
-  useEffect(() => {
-    axios("http://localhost:8000/api/get").then(
-      (res) => {
-        setData(res.data);
-        setLoading(false);
-      },
-      (error) => {
-        console.error("Error fetching data: ", error);
-        setError(error);
+  const errors = {
+    uname: "invalid username",
+    pass: "invalid password"
+  };
+
+  const handleSubmit = (event) => {
+    //Prevent page reload
+    event.preventDefault();
+
+    var { uname, pass } = document.forms[0];
+
+    // Find user login info
+    const userData = database.find((user) => user.username === uname.value);
+
+    // Compare user info
+    if (userData) {
+      if (userData.password !== pass.value) {
+        // Invalid password
+        setErrorMessages({ name: "pass", message: errors.pass });
+      } else {
+        setIsSubmitted(true);
       }
+    } else {
+      // Username not found
+      setErrorMessages({ name: "uname", message: errors.uname });
+    }
+  };
+
+  // Generate JSX code for error message
+  const renderErrorMessage = (name) =>
+    name === errorMessages.name && (
+      <div className="error">{errorMessages.message}</div>
     );
-  }, []);
 
-
-  if (loading) return "Loading...";
-  if (error) return "Error!";
+  // JSX code for login form
+  const renderForm = (
+    <div className="form">
+      <form onSubmit={handleSubmit}>
+        <div className="input-container">
+          <label>Username </label>
+          <input type="text" name="uname" required />
+          {renderErrorMessage("uname")}
+        </div>
+        <div className="input-container">
+          <label>Password </label>
+          <input type="password" name="pass" required />
+          {renderErrorMessage("pass")}
+        </div>
+        <div className="button-container">
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
+  );
 
   return (
-    
-    <ThemeProvider theme={theme}>
-      <SideMenu />
-      <div className={classes.appMain}>
-        
-      {/* <pre>{JSON.stringify(data, null, 1)}</pre> */}
-        <Header />
-
-        <Employees />
+    <div className="app">
+      <div className="login-form">
+        <div className="title">Sign In</div>
+        {isSubmitted ? < MainPage /> : renderForm}
       </div>
-      <CssBaseline />
-    </ThemeProvider>
+    </div>
   );
 }
 
