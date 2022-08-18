@@ -20,16 +20,16 @@ const theme = createTheme({
       default: "#f4f5fd"
     },
   },
-  overrides:{
-    MuiAppBar:{
-      root:{
-        transform:'translateZ(0)'
+  overrides: {
+    MuiAppBar: {
+      root: {
+        transform: 'translateZ(0)'
       }
     }
   },
-  props:{
-    MuiIconButton:{
-      disableRipple:true
+  props: {
+    MuiIconButton: {
+      disableRipple: true
     }
   }
 })
@@ -40,6 +40,12 @@ const useStyles = makeStyles({
     width: '100%'
   }
 })
+
+
+
+
+
+
 
 function App() {
   const classes = useStyles();
@@ -70,8 +76,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
-        <Header />
         
+      {/* <pre>{JSON.stringify(data, null, 1)}</pre> */}
+        <Header />
+
         <Employees />
       </div>
       <CssBaseline />

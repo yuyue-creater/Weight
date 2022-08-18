@@ -88,7 +88,6 @@ export default function Employees() {
 
     // Adding or editing a member
     const addOrEdit = (employee, resetForm) => {
-
         // Insert a member to the list
         if (employee.id === 0) {
             employeeService.insertEmployee(employee)
