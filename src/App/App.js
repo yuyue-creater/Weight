@@ -4,8 +4,7 @@ import SideMenu from "../components/SideMenu";
 import { makeStyles, CssBaseline, createTheme, ThemeProvider } from '@material-ui/core';
 import Header from "../components/Header";
 import Employees from "../Employees/Employees";
-
-import axios from 'axios';
+import axios from "axios";
 
 const theme = createTheme({
   palette: {
@@ -55,22 +54,6 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   fetch("https://jsonplaceholder.typicode.com/users")
-  //     .then((res) => res.json())
-  //     .then(
-  //       (result) => {
-  //         setData(result);
-  //         setLoading(false);
-  //       },
-  //       (error) => {
-  //         console.error("Error fetching data: ", error);
-  //         setError(error);
-  //       }
-  //     );
-  // }, []);
-
-
   useEffect(() => {
     axios("http://localhost:8000/api/get").then(
       (res) => {
@@ -88,10 +71,8 @@ function App() {
   if (loading) return "Loading...";
   if (error) return "Error!";
 
-
   return (
-
-
+    
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>

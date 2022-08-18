@@ -19,7 +19,7 @@ const db = mysql.createConnection({
 module.exports = db;
 
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/api/get', (req, res) => {
     const sqlSelect = "SELECT * FROM members";
@@ -31,7 +31,7 @@ app.get('/api/get', (req, res) => {
 app.post("/api/insert", (req, res) => {
 
     console.log(req.body)
-    
+
     const memberID = req.body.memberID;
     const name = req.body.name;
     const weight = req.body.weight;
@@ -47,7 +47,7 @@ app.post("/api/insert", (req, res) => {
 });
 
 app.put("/api/update/:id", (req, res) => {
-    
+
     const id = req.params.id;
     const weight = req.body.weight;
     const height = req.body.height;
@@ -57,13 +57,13 @@ app.put("/api/update/:id", (req, res) => {
 
     console.log(`update ${id}`)
     console.log(req.body)
-   
-   
 
-    
+
+
+
     db.query("UPDATE members SET weight = ?, height = ?, name = ?, age = ?, gender=? WHERE memberID = ?",
         [weight, height, name, age, gender, id],
-        
+
         (err, result) => {
             console.log("here")
             if (err) {
@@ -79,25 +79,25 @@ app.put("/api/update/:id", (req, res) => {
 app.delete("/api/delete/:id", (req, res) => {
     const id = req.params.id;
     console.log(`delete ${id}`)
-  
-    db.query("DELETE FROM members WHERE memberID = ?", id, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
-    });
-  });
 
-  app.get("/api/getAll/", (req, res) => {
-    db.query("SELECT * FROM members", (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
+    db.query("DELETE FROM members WHERE memberID = ?", id, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
     });
-  });
+});
+
+app.get("/api/getAll/", (req, res) => {
+    db.query("SELECT * FROM members", (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
 
 app.listen(8000, () => {
     console.log("running on port 8000");

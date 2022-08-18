@@ -3,7 +3,8 @@ import { Grid, } from '@material-ui/core';
 import Controls from "../components/controls/Controls";
 import { useForm, Form } from '../components/useForm';
 import * as employeeService from "../services/employeeService";
-import axios from 'axios';
+import DatePicker from '../components/controls/DatePicker';
+
 
 const genderItems = [
     { id: 'male', title: 'Male' },
@@ -14,17 +15,28 @@ const genderItems = [
 const initialFValues = {
     id: 0,
     memberID: '',
-    fullName: '',
+    name: '',
     email: '',
     mobile: '',
     city: '',
     gender: 'male',
     weight: '',
     height: '',
+    age: '',
     birthDate: '',
     departmentId: '',
     hireDate: new Date(),
     isPermanent: false,
+}
+
+
+function getAge(dob) { 
+    // var dob = new Date(document.getElementById("birthdate").value);
+    var diff_ms = Date.now() - dob.getTime();
+    var age_dt = new Date(diff_ms); 
+  
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
+
 }
 
 
@@ -35,8 +47,8 @@ export default function EmployeeForm(props) {
         let temp = { ...errors }
         if ('memberID' in fieldValues)
             temp.memberID = fieldValues.memberID ? "" : "This field is required."
-        if ('fullName' in fieldValues)
-            temp.fullName = fieldValues.fullName ? "" : "This field is required."
+        if ('name' in fieldValues)
+            temp.name = fieldValues.name ? "" : "This field is required."
         // if ('email' in fieldValues)
         //     temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
         // if ('mobile' in fieldValues)
@@ -72,9 +84,7 @@ export default function EmployeeForm(props) {
             })
     }, [recordForEdit])
 
-   
-
-
+    const [value, onChange] = useState(new Date());
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
@@ -87,11 +97,11 @@ export default function EmployeeForm(props) {
                         error={errors.memberID}
                     />
                     <Controls.Input
-                        name="fullName"
-                        label="Full Name"
-                        value={values.fullName}
+                        name="name"
+                        label="Name"
+                        value={values.name}
                         onChange={handleInputChange}
-                        error={errors.fullName}
+                        error={errors.name}
                     />
                    
                     <Controls.Input
@@ -118,13 +128,20 @@ export default function EmployeeForm(props) {
                         items={genderItems}
                     />
 
-                    <Controls.DatePicker
+                    {/* <Controls.DatePicker
                         name="birthDate"
                         label="BirthDate"
-                        value={values.birthDate}
+                        value={(values.birthDate)}
                         onChange={handleInputChange}
-                    />  
+                    />   */}
+                    <DatePicker onChange={onChange} value={value} />
 
+                    <Controls.Input
+                        name="age"
+                        label="Age"
+                        value={values.age}
+                        onChange={handleInputChange}
+                    />
                     <Controls.Select
                         name="departmentId"
                         label="Department"
