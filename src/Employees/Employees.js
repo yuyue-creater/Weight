@@ -35,7 +35,7 @@ const headCells = [
     { id: 'memberID', label: 'MemberID' },
     { id: 'name', label: 'Employee Name' },
     { id: 'weight', label: 'Weight' },
-    { id: 'birthDate', label: 'Age' },
+    { id: 'age', label: 'Age' },
     { id: 'height', label: 'Height' },
     { id: 'gender', label: 'Gender' }
 ]
@@ -106,7 +106,7 @@ export default function Employees() {
         setOpenPopup(false)
         setRecords(employeeService.getAllEmployees())
 
-        // Show that a membe is added
+        // Show that a member is added
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -189,7 +189,7 @@ export default function Employees() {
                                 <TableCell>{item.memberID}</TableCell>
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.weight}</TableCell>
-                                <TableCell>{item.birthDate}</TableCell>
+                                <TableCell>{item.age}</TableCell>
                                 <TableCell>{item.height}</TableCell>
                                 <TableCell>{item.gender}</TableCell>
                                 <TableCell>
@@ -209,6 +209,13 @@ export default function Employees() {
                                             })
                                         }}>
                                         <CloseIcon fontSize="small" />
+                                    </Controls.ActionButton>
+                                    <Controls.ActionButton
+                                        color="primary"
+                                        
+                                        >
+                                           
+
                                     </Controls.ActionButton>
                                 </TableCell>
                             </TableRow>)

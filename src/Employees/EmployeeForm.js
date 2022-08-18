@@ -5,6 +5,7 @@ import { useForm, Form } from '../components/useForm';
 import * as employeeService from "../services/employeeService";
 import DatePicker from '../components/controls/DatePicker';
 
+
 const genderItems = [
     { id: 'male', title: 'Male' },
     { id: 'female', title: 'Female' },
@@ -83,9 +84,7 @@ export default function EmployeeForm(props) {
             })
     }, [recordForEdit])
 
-   const [selectedDate, setSelectedDate] = useState(null)
-
-
+    const [value, onChange] = useState(new Date());
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container>
@@ -135,11 +134,12 @@ export default function EmployeeForm(props) {
                         value={(values.birthDate)}
                         onChange={handleInputChange}
                     />   */}
+                    <DatePicker onChange={onChange} value={value} />
 
                     <Controls.Input
-                        name="birthDate"
-                        label="BirthDate"
-                        value={values.birthDate}
+                        name="age"
+                        label="Age"
+                        value={values.age}
                         onChange={handleInputChange}
                     />
                     <Controls.Select

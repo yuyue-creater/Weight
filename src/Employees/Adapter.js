@@ -7,7 +7,7 @@ export const createMember = item => {
         name: item.name,
         weight: parseFloat(item.weight),
         height: parseFloat(item.height),
-        age: parseInt(item.height),
+        age: parseInt(item.age),
         gender: item.gender,
     }).then(() => {
         alert("Member inserted into sql");
@@ -29,7 +29,7 @@ export const updateMember = item => {
         name: item.name,
         weight: parseFloat(item.weight),
         height: parseFloat(item.height),
-        age: parseInt(item.height),
+        age: parseInt(item.age),
         gender: item.gender
     }).then((response) => {
         alert("updation complete")
